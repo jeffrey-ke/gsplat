@@ -37,10 +37,8 @@ RUN  apt-get install -y \
 RUN pip install torch==2.4.1 torchvision==0.19.1 torchaudio==2.4.1 --index-url https://download.pytorch.org/whl/cu118
 RUN pip install "numpy<2.0"
 ARG TORCH_CUDA_ARCH_LIST="8.9"
-# what I actually want: I want to clone my repo, and then to build it in the container
-WORKDIR /home/gsplat
-COPY . /home/gsplat
-RUN pip install .
+
+RUN pip install git:https://github.com/jeffrey-ke/gsplat.git
 
 # for compiling against gcc 10 as per colmap instructions
 ENV CC=/usr/bin/gcc-10
@@ -55,3 +53,4 @@ RUN git clone https://github.com/colmap/colmap.git . && \
     cmake .. -GNinja -DBLA_VENDOR=Intel10_64lp -DCMAKE_CUDA_ARCHITECTURES=89&& \
     ninja && \
     ninja install
+WORKDIR /home
